@@ -1,0 +1,8 @@
+{
+    "workspace.library": [
+        "/home/morza/Dev/nvim-09/share/nvim/runtime/lua",
+        "/home/morza/.config/nvim/lua",
+        "/home/morza/.local/share/nvim/mason/packages/lua-language-server/libexec/meta/411441e4",
+        "/home/morza/.local/share/nvim/mason/packages/lua-language-server/libexec/meta/2db7010b"
+    ]
+}

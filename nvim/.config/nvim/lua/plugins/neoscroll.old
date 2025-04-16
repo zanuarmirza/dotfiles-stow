@@ -1,0 +1,6 @@
+-- require('neoscroll').setup()
+-- local t = {}
+-- -- Syntax: t[keys] = {function, {function arguments}}
+-- t['<C-u>'] = {'scroll', {'-0.40', 'true', '100', nil}}
+-- t['<C-d>'] = {'scroll', { '0.40', 'true', '100', nil}}
+-- require('neoscroll.config').set_mappings(t)
