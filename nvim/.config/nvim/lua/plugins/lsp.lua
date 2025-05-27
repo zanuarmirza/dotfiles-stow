@@ -118,7 +118,7 @@ return {
                     vim.api.nvim_set_keymap(
                         "n",
                         "<leader>li",
-                        "<cmd>EslintFixAll<CR>",
+                        "<cmd>LspEslintFixAll<CR>",
                         { noremap = true, silent = true }
                     )
                 end,
