@@ -43,6 +43,16 @@ return {
                 vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled())
             end
 
+            vim.diagnostic.config({
+                virtual_text = true
+            })
+
+            function ToggleInlineError()
+                vim.diagnostic.config({
+                    virtual_text = not vim.diagnostic.config().virtual_text
+                })
+            end
+
             vim.api.nvim_create_autocmd("LspAttach", {
                 desc = "LSP actions",
                 callback = function(event)
@@ -94,6 +104,7 @@ return {
                         vim.lsp.buf.signature_help()
                     end, opts)
                     vim.keymap.set("n", "ti", ToggleInlay, opts)
+                    vim.keymap.set("n", "te", ToggleInlineError, opts)
                     -- The following command requires plug-ins "nvim-telescope/telescope.nvim", "nvim-lua/plenary.nvim", and optionally "kyazdani42/nvim-web-devicons" for icon support
                     vim.api.nvim_set_keymap(
                         "n",
@@ -137,85 +148,33 @@ return {
             -- (Optional) Configure lua language server for neovim
             -- lsp.nvim_workspace()
 
-            -- vim.diagnostic.config({
-            --     virtual_text = true
-            -- })
 
-            local function organize_imports()
-                local params = {
-                    command = "_typescript.organizeImports",
-                    arguments = { vim.api.nvim_buf_get_name(0) },
-                    title = "",
-                }
-                vim.lsp.buf.execute_command(params)
-            end
-            local lspconfig = require("lspconfig")
+            vim.lsp.config('ts_ls', {
+                on_attach = function(client, bufnr)
+                    -- ts_ls provides `source.*` code actions that apply to the whole file. These only appear in
+                    -- `vim.lsp.buf.code_action()` if specified in `context.only`.
+                    vim.api.nvim_buf_create_user_command(0, 'LspTypescriptSourceAction', function()
+                        local source_actions = vim.tbl_filter(function(action)
+                            return vim.startswith(action, 'source.')
+                        end, client.server_capabilities.codeActionProvider.codeActionKinds)
 
-            lspconfig.gopls.setup({
-                settings = {
-                    gopls = {
-                        hints = {
-                            assignVariableTypes = true,
-                            compositeLiteralFields = true,
-                            constantValues = true,
-                            functionTypeParameters = true,
-                            parameterNames = true,
-                            rangeVariableTypes = true,
-                        },
-                    },
-                },
-            })
-            lspconfig.denols.setup({
-                on_attach = on_attach,
-                root_dir = lspconfig.util.root_pattern("deno.json", "deno.jsonc"),
-            })
-
-            lspconfig.graphql.setup({})
-
-            lspconfig.ts_ls.setup({
-                root_dir = lspconfig.util.root_pattern("package.json"),
-                single_file_support = false,
-                on_attach = on_attach,
-                capabilities = capabilities,
-                commands = {
-                    OrganizeImports = {
-                        organize_imports,
-                        description = "Organize Imports",
-                    },
-                },
-                settings = {
-                    typescript = {
-                        inlayHints = {
-                            includeInlayParameterNameHints = "all",
-                            includeInlayParameterNameHintsWhenArgumentMatchesName = false,
-                            includeInlayFunctionParameterTypeHints = true,
-                            includeInlayVariableTypeHints = true,
-                            includeInlayVariableTypeHintsWhenTypeMatchesName = false,
-                            includeInlayPropertyDeclarationTypeHints = true,
-                            includeInlayFunctionLikeReturnTypeHints = true,
-                            includeInlayEnumMemberValueHints = true,
-                        },
-                    },
-                },
-            })
-            lspconfig.tailwindcss.setup({
-                settings = {
-                    tailwindCSS = {
-                        experimental = {
-                            classRegex = {
-                                { "cva\\(([^)]*)\\)", "[\"'`]([^\"'`]*).*?[\"'`]" },
-                                { "cx\\(([^)]*)\\)",  "(?:'|\"|`)([^']*)(?:'|\"|`)" },
+                        vim.lsp.buf.code_action({
+                            context = {
+                                only = source_actions,
                             },
-                        },
-                    },
-                },
-            })
+                        })
+                    end, {})
+                    vim.api.nvim_buf_create_user_command(0, 'LspOrganizeImports', function()
+                        local params = {
+                            command = "_typescript.organizeImports",
+                            arguments = { vim.api.nvim_buf_get_name(0) },
+                            title = "",
+                        }
 
-            lspconfig.biome.setup({})
-            lspconfig.wgsl_analyzer.setup({})
-            lspconfig.clangd.setup({})
-            lspconfig.zls.setup({})
-            lspconfig.docker_compose_language_service.setup({})
+                        client:request_sync('workspace/executeCommand', params, nil, bufnr)
+                    end, {})
+                end,
+            })
             local function set_filetype(pattern, filetype)
                 vim.api.nvim_create_autocmd({ "BufRead", "BufNewFile" }, {
                     pattern = pattern,
@@ -224,24 +183,6 @@ return {
             end
 
             set_filetype({ "docker-compose.yaml" }, "yaml.docker-compose")
-
-            -- lspconfig.rust_analyzer.setup {
-            --   -- Other Configs ...
-            --   settings = {
-            --     ["rust-analyzer"] = {
-            --       -- Other Settings ...
-            --       procMacro = {
-            --         ignored = {
-            --             leptos_macro = {
-            --                 -- optional: --
-            --                 -- "component",
-            --                 "server",
-            --             },
-            --         },
-            --       },
-            --     },
-            --   }
-            -- }
         end,
     }, -- Required
     dependencies = {
@@ -265,16 +206,16 @@ return {
         event = 'InsertEnter',
         config = function()
             local cmp = require("cmp")
-            local function luasnip_safe_jump_forward()
-                if ls.jumpable(1) then
-                    ls.jump(1)
-                end
-            end
-            local function luasnip_safe_jump_backward()
-                if ls.jumpable(-1) then
-                    ls.jump(-1)
-                end
-            end
+            -- local function luasnip_safe_jump_forward()
+            --     if ls.jumpable(1) then
+            --         ls.jump(1)
+            --     end
+            -- end
+            -- local function luasnip_safe_jump_backward()
+            --     if ls.jumpable(-1) then
+            --         ls.jump(-1)
+            --     end
+            -- end
 
             local cmp_select = { behavior = cmp.SelectBehavior.Select }
             cmp.setup({
@@ -287,8 +228,8 @@ return {
                     ["<C-n>"] = cmp.mapping.select_next_item(cmp_select),
                     ["<CR>"] = cmp.mapping.confirm({ select = true }),
                     ["<C-Space>"] = cmp.mapping.complete(),
-                    ["<Tab>"] = luasnip_safe_jump_forward,
-                    ["<S-Tab>"] = luasnip_safe_jump_backward,
+                    -- ["<Tab>"] = luasnip_safe_jump_forward,
+                    -- ["<S-Tab>"] = luasnip_safe_jump_backward,
                 }),
                 snippet = {
                     expand = function(args)

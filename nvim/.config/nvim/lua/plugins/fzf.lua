@@ -27,6 +27,8 @@ return {{
         vim.keymap.set('n', '<leader>gt', "<cmd>FzfLua git_status<CR>") -- show git status list
         vim.keymap.set('n', '<leader>/', "<cmd>FzfLua lgrep_curbuf<CR>") -- show git status list
 
+        vim.keymap.set("n", "<leader>mr", "<cmd>FzfLua marks<CR>", {})
+
         vim.keymap.set('n', '<leader>o', function()
             m.oldfiles({
                 fzf_opts                = { ['--keep-right'] = '' },
