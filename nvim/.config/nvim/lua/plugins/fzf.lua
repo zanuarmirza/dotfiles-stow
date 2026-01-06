@@ -40,7 +40,8 @@ return { {
         local m = require("fzf-lua")
 
         vim.keymap.set('n', '<leader>ff', "<cmd>FzfLua files<CR>")       -- find files (fuzzy)
-        vim.keymap.set('n', '<leader>fb', "<cmd>Fzflua buffers<CR>")     -- show buffer
+        vim.keymap.set('n', '<leader>fq', "<cmd>FzfLua quickfix<CR>")       -- quickfix
+        vim.keymap.set('n', '<leader>fb', "<cmd>FzfLua buffers<CR>")     -- show buffer
         vim.keymap.set('n', '<M-s>', "<cmd>FzfLua git_status<CR>")       -- git status
         vim.keymap.set('n', '<M-p>', "<cmd>FzfLua git_files<CR>")        -- search files at git
         vim.keymap.set('n', '<M-P>', "<cmd>FzfLua commands<CR>")         -- list commands
@@ -61,6 +62,11 @@ return { {
                 include_current_session = true, -- include bufs from current session
             })
         end, {})                                -- show oldfiles
+
+        vim.keymap.set('n', '<leader>O', function()
+            m.buffers()
+        end, {})                                -- show oldfiles
+
 
         vim.keymap.set('n', '<leader>fg', function()
             m.grep({ search = vim.fn.input("Grep > ") });

@@ -8,6 +8,7 @@ return {
         "antoinemadec/FixCursorHold.nvim",
         "nvim-treesitter/nvim-treesitter",
         "nvim-neotest/neotest-vim-test",
+        "nvim-neotest/neotest-jest",
     },
     config = function()
         -- get neotest namespace (api call creates or returns namespace)
@@ -22,19 +23,32 @@ return {
             },
         }, neotest_ns)
 
-        require("neotest").setup({
+        local neotest = require("neotest")
+        neotest.setup({
             -- your neotest config here
             adapters = {
                 require("neotest-go"),
                 require('rustaceanvim.neotest'),
                 require("neotest-vim-test")({ ignore_filetypes = { "go", "rust" } }),
+                require("neotest-jest")({
+                    jestCommand = "npm test --",
+                    jestArguments = function(defaultArguments, context)
+                        return defaultArguments
+                    end,
+                    jestConfigFile = "custom.jest.config.ts",
+                    env = { CI = true },
+                    cwd = function(path)
+                        return vim.fn.getcwd()
+                    end,
+                    isTestFile = require("neotest-jest.jest-util").defaultIsTestFile,
+                }),
             },
         })
 
-        vim.keymap.set('n', '<leader>td', function() require("neotest").run.run({ strategy = "dap" }) end)
-        vim.keymap.set('n', '<leader>tr', function() require('neotest').run.run() end)
-        vim.keymap.set('n', '<leader>to', function() require('neotest').output.open() end)
-        vim.keymap.set('n', '<leader>TO', function() require('neotest').output_panel.toggle() end)
-        vim.keymap.set('n', '<leader>ts', function() require('neotest').summary.toggle() end)
+        vim.keymap.set('n', '<leader>td', function() neotest.run.run({ strategy = "dap" }) end)
+        vim.keymap.set('n', '<leader>tr', function() neotest.run.run() end)
+        vim.keymap.set('n', '<leader>to', function() neotest.output.open() end)
+        vim.keymap.set('n', '<leader>TO', function() neotest.output_panel.toggle() end)
+        vim.keymap.set('n', '<leader>ts', function() neotest.summary.toggle() end)
     end,
 }

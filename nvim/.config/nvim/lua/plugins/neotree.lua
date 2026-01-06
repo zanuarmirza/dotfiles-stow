@@ -162,7 +162,7 @@ return {
                         --".null-ls_*",
                     },
                 },
-                follow_current_file = {enabled = false},            -- This will find and focus the file in the active buffer every
+                follow_current_file = {enabled = true},            -- This will find and focus the file in the active buffer every
                 -- time the current file is changed while the tree is open.
                 group_empty_dirs = false,               -- when true, empty folders will be grouped together
                 hijack_netrw_behavior = "open_default", -- netrw disabled, opening a directory opens neo-tree
@@ -270,7 +270,8 @@ return {
             }
         })
 
-        vim.keymap.set("n", "<leader>E", "<cmd>Neotree toggle reveal_force_cwd left<CR>")
         vim.keymap.set("n", "<leader>e", "<cmd>Neotree float toggle reveal_force_cwd<CR>")
+        vim.keymap.set("n", "<F4>", "<cmd>Neotree toggle show left reveal_force_cwd<CR>")
+        vim.keymap.set("n", "<leader><F4>", "<cmd>Neotree left reveal_force_cwd<CR>")
     end
 }

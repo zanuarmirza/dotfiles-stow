@@ -7,7 +7,7 @@ return {
                 theme = 'dracula'
             },
             sections = {
-                lualine_c = { { 'filename', path = 1, shorting_target = 0 }, "require'lsp-status'.status()" },
+                lualine_c = { { 'filename', path = 1, shorting_target = 0 } },
                 lualine_x = {}
             },
             inactive_sections = {
@@ -19,8 +19,7 @@ return {
                 lualine_z = {}
             },
             tabline = {
-                lualine_b = { { 'filename', path = 1, shorting_target = 0 } },
-                lualine_c = {},
+                lualine_c = { { "require'lsp-status'.status()" } },
                 lualine_x = {
                     { 'encoding' },
                     {
