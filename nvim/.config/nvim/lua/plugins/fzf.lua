@@ -39,7 +39,10 @@ return { {
 
         local m = require("fzf-lua")
 
+
+        vim.keymap.set('n', '<leader>fz', "<cmd>FzfLua <CR>") 
         vim.keymap.set('n', '<leader>ff', "<cmd>FzfLua files<CR>")       -- find files (fuzzy)
+        vim.keymap.set('n', '<leader>fm', "<cmd>FzfLua marks<CR>")       -- find files (fuzzy)
         vim.keymap.set('n', '<leader>fq', "<cmd>FzfLua quickfix<CR>")       -- quickfix
         vim.keymap.set('n', '<leader>fb', "<cmd>FzfLua buffers<CR>")     -- show buffer
         vim.keymap.set('n', '<M-s>', "<cmd>FzfLua git_status<CR>")       -- git status
@@ -47,7 +50,7 @@ return { {
         vim.keymap.set('n', '<M-P>', "<cmd>FzfLua commands<CR>")         -- list commands
         vim.keymap.set('n', '<leader>fr', "<cmd>FzfLua resume<CR>")      -- show latest telescope result
         vim.keymap.set('n', 'gI', "<cmd>FzfLua lsp_implementations<CR>") -- list implementation
-        -- vim.keymap.set('n', '<leader>fs', m.lsp_document_symbols, {}) -- show documents symbols
+        vim.keymap.set('n', '<leader>fl', "<cmd>FzfLua lsp_live_workspace_symbols<CR>") -- show documents symbols
         vim.keymap.set('n', '<leader>gt', "<cmd>FzfLua git_status<CR>")  -- show git status list
         vim.keymap.set('n', '<leader>/', "<cmd>FzfLua lgrep_curbuf<CR>") -- show git status list
 

@@ -178,7 +178,7 @@ return {
                         local content = node.path
                         print(content)
                         -- relative
-                        vim.fn.setreg('"', content)
+                        vim.fn.setreg('+', content)
                     end,
                     delete = function(state)
                         local inputs = require("neo-tree.ui.inputs")
@@ -270,8 +270,8 @@ return {
             }
         })
 
-        vim.keymap.set("n", "<leader>e", "<cmd>Neotree float toggle reveal_force_cwd<CR>")
-        vim.keymap.set("n", "<F4>", "<cmd>Neotree toggle show left reveal_force_cwd<CR>")
-        vim.keymap.set("n", "<leader><F4>", "<cmd>Neotree left reveal_force_cwd<CR>")
+        vim.keymap.set("n", "<leader>e", "<cmd>Neotree toggle right reveal_force_cwd<CR>")
+        vim.keymap.set("n", "<F4>", "<cmd>Neotree right reveal_force_cwd<CR>")
+        vim.keymap.set("n", "<leader>E", "<cmd>Neotree toggle float reveal_force_cwd<CR>")
     end
 }
