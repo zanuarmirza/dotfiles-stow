@@ -27,6 +27,10 @@ return { {
                     ["alt-f"]  = FzfLua.actions.toggle_follow,
                 },
             },
+            oldfiles = {
+                formatter    = "path.filename_first",
+                path_shorten = 30
+            },
             winopts = {
                 preview = {
                     layout = "vertical"
@@ -40,19 +44,19 @@ return { {
         local m = require("fzf-lua")
 
 
-        vim.keymap.set('n', '<leader>fz', "<cmd>FzfLua <CR>") 
-        vim.keymap.set('n', '<leader>ff', "<cmd>FzfLua files<CR>")       -- find files (fuzzy)
-        vim.keymap.set('n', '<leader>fm', "<cmd>FzfLua marks<CR>")       -- find files (fuzzy)
-        vim.keymap.set('n', '<leader>fq', "<cmd>FzfLua quickfix<CR>")       -- quickfix
-        vim.keymap.set('n', '<leader>fb', "<cmd>FzfLua buffers<CR>")     -- show buffer
-        vim.keymap.set('n', '<M-s>', "<cmd>FzfLua git_status<CR>")       -- git status
-        vim.keymap.set('n', '<M-p>', "<cmd>FzfLua git_files<CR>")        -- search files at git
-        vim.keymap.set('n', '<M-P>', "<cmd>FzfLua commands<CR>")         -- list commands
-        vim.keymap.set('n', '<leader>fr', "<cmd>FzfLua resume<CR>")      -- show latest telescope result
-        vim.keymap.set('n', 'gI', "<cmd>FzfLua lsp_implementations<CR>") -- list implementation
+        vim.keymap.set('n', '<leader>fz', "<cmd>FzfLua <CR>")
+        vim.keymap.set('n', '<leader>ff', "<cmd>FzfLua files<CR>")                      -- find files (fuzzy)
+        vim.keymap.set('n', '<leader>fm', "<cmd>FzfLua marks<CR>")                      -- find files (fuzzy)
+        vim.keymap.set('n', '<leader>fq', "<cmd>FzfLua quickfix<CR>")                   -- quickfix
+        vim.keymap.set('n', '<leader>fb', "<cmd>FzfLua buffers<CR>")                    -- show buffer
+        vim.keymap.set('n', '<M-s>', "<cmd>FzfLua git_status<CR>")                      -- git status
+        vim.keymap.set('n', '<M-p>', "<cmd>FzfLua git_files<CR>")                       -- search files at git
+        vim.keymap.set('n', '<M-P>', "<cmd>FzfLua commands<CR>")                        -- list commands
+        vim.keymap.set('n', '<leader>fr', "<cmd>FzfLua resume<CR>")                     -- show latest telescope result
+        vim.keymap.set('n', 'gI', "<cmd>FzfLua lsp_implementations<CR>")                -- list implementation
         vim.keymap.set('n', '<leader>fl', "<cmd>FzfLua lsp_live_workspace_symbols<CR>") -- show documents symbols
-        vim.keymap.set('n', '<leader>gt', "<cmd>FzfLua git_status<CR>")  -- show git status list
-        vim.keymap.set('n', '<leader>/', "<cmd>FzfLua lgrep_curbuf<CR>") -- show git status list
+        vim.keymap.set('n', '<leader>gt', "<cmd>FzfLua git_status<CR>")                 -- show git status list
+        vim.keymap.set('n', '<leader>/', "<cmd>FzfLua lgrep_curbuf<CR>")                -- show git status list
 
         vim.keymap.set("n", "<leader>mr", "<cmd>FzfLua marks<CR>", {})
 
@@ -68,7 +72,7 @@ return { {
 
         vim.keymap.set('n', '<leader>O', function()
             m.buffers()
-        end, {})                                -- show oldfiles
+        end, {}) -- show oldfiles
 
 
         vim.keymap.set('n', '<leader>fg', function()
