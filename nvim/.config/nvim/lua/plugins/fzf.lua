@@ -54,7 +54,7 @@ return { {
         vim.keymap.set('n', '<M-P>', "<cmd>FzfLua commands<CR>")                        -- list commands
         vim.keymap.set('n', '<leader>fr', "<cmd>FzfLua resume<CR>")                     -- show latest telescope result
         vim.keymap.set('n', 'gI', "<cmd>FzfLua lsp_implementations<CR>")                -- list implementation
-        vim.keymap.set('n', '<leader>fl', "<cmd>FzfLua lsp_live_workspace_symbols<CR>") -- show documents symbols
+        vim.keymap.set('n', '<leader>fws', "<cmd>FzfLua lsp_live_workspace_symbols<CR>") -- show documents symbols
         vim.keymap.set('n', '<leader>gt', "<cmd>FzfLua git_status<CR>")                 -- show git status list
         vim.keymap.set('n', '<leader>/', "<cmd>FzfLua lgrep_curbuf<CR>")                -- show git status list
 
@@ -88,7 +88,7 @@ return { {
         end)
 
         vim.keymap.set('n', '<leader>flG', function()
-            m.live_grep({ rg_opts = '--multiline --line-number --column --color=always --hidden' });
+            m.live_grep({ rg_opts = '--null --multiline --multiline-dotall --line-number --column --color=always --hidden' });
         end)
     end
 },
